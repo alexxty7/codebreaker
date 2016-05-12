@@ -20,7 +20,7 @@ module Codebreaker
 
     context '#mark_guess' do
       before do
-        allow_any_instance_of(Game).to receive(:generate_code).and_return("1234")
+        allow_any_instance_of(Game).to receive(:generate_code).and_return('1234')
       end
 
       it 'mark right guess with +' do
@@ -32,10 +32,10 @@ module Codebreaker
       end
 
       [
-        ['1134', '1155', '++'], ['1134', '5115', '+-'], ['1134','5511', '--'],
-        ['1134', '1115', '++'], ['1134','5111', '+-'], ['1234', '1555', '+'],
-        ['1234', '2555', '-'], ['1234', '5224', '++'], ['1234', '5154', '+-'], 
-        ['1234', '2545', '--'], ['1234', '5234', '+++'], ['1234', '5134', '++-'], 
+        ['1134', '1155', '++'], ['1134', '5115', '+-'], ['1134', '5511', '--'],
+        ['1134', '1115', '++'], ['1134', '5111', '+-'], ['1234', '1555', '+'],
+        ['1234', '2555', '-'], ['1234', '5224', '++'], ['1234', '5154', '+-'],
+        ['1234', '2545', '--'], ['1234', '5234', '+++'], ['1234', '5134', '++-'],
         ['1234', '5124', '+--'], ['1234', '5115', '-']
       ].each do |el|
         it "when code is #{el[0]} and guess is #{el[1]} should return #{el[2]}" do
@@ -45,9 +45,19 @@ module Codebreaker
       end
     end
 
+    context '#generate_code' do
+      it 'return 4 numbers from 1 to 6' do
+        expect(game.send(:generate_code)).to match(/[1-6]{4}/)
+      end
+
+      it 'return different numbers each times' do
+        expect(game.send(:generate_code)).to_not eq(game.send(:generate_code))
+      end
+    end
+
     context '#check_guess' do
       before do
-        allow_any_instance_of(Game).to receive(:generate_code).and_return("1234")
+        allow_any_instance_of(Game).to receive(:generate_code).and_return('1234')
       end
 
       it 'decrease turn number by 1' do
@@ -87,12 +97,12 @@ module Codebreaker
 
     context '#save result' do
       after do
-        File.delete("statistic.yml")
+        File.delete('statistic.yml')
       end
 
       it 'save result to file' do
-        game.save_result("alex")
-        expect(File.exist?("statistic.yml")).to eq true
+        game.save_result('alex')
+        expect(File.exist?('statistic.yml')).to eq true
       end
     end
 
@@ -101,7 +111,7 @@ module Codebreaker
         game.save_result('alex')
         result = Game.load_result
         expect(result[0][:user_name]).to eq('alex')
-        File.delete("statistic.yml")
+        File.delete('statistic.yml')
       end
 
       it 'retun empty array if file dont exist' do
