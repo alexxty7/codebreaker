@@ -59,7 +59,7 @@ module Codebreaker
     private
 
     def generate_code
-      (1..4).map { rand(1..6).to_s }.join
+      (1..4).map { rand(1..6) }.join
     end
 
     def mark_guess(answer)
