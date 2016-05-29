@@ -7,11 +7,11 @@ module Codebreaker
     TURNS_NUMBER = 5
     HINTS_NUMBER = 1
 
-    def initialize
-      @secret_code = generate_code
-      @turns_number = TURNS_NUMBER
-      @hint_number = HINTS_NUMBER
-      @game_status = ''
+    def initialize(**options)
+      @secret_code = options[:secret_code] || generate_code
+      @turns_number = options[:turns_number] || TURNS_NUMBER
+      @hint_number = options[:hint_number] || HINTS_NUMBER
+      @game_status = options[:game_status] || ''
     end
 
     def check_guess(answer)
@@ -35,7 +35,7 @@ module Codebreaker
       !@game_status.empty?
     end
 
-    def save_result(user_name)
+    def save_result(user_name, file = 'statistic.yml')
       result = {}
       result[:user_name] = user_name
       result[:secret_code] = @secret_code
@@ -43,17 +43,24 @@ module Codebreaker
       result[:used_hints] = HINTS_NUMBER - @hint_number
       result[:game_status] = @game_status
 
-      File.open('statistic.yml', 'a') do |f|
+      File.open(file, 'a') do |f|
         f.write(Psych.dump(result))
       end
     end
 
-    def self.load_result
-      begin
-        Psych.load_stream(File.read('statistic.yml'))
-      rescue
-        []
-      end
+    def self.load_result(file = 'statistic.yml')
+      Psych.load_stream(File.read(file))
+    rescue
+      []
+    end
+
+    def to_h
+      {
+        turns_number: @turns_number,
+        game_status: @game_status,
+        hint_number: @hint_number,
+        secret_code: @secret_code
+      }
     end
 
     private

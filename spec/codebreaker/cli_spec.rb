@@ -61,6 +61,8 @@ module Codebreaker
     end
 
     context '#save_game' do
+      before { allow(game).to receive(:save_result) }
+
       it 'proms for save result' do
         allow(cli).to receive(:gets).and_return('no')
         expect { cli.save_game }.to output(/save your result/).to_stdout

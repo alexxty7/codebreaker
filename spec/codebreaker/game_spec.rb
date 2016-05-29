@@ -118,5 +118,29 @@ module Codebreaker
         expect(Game.load_result).to eq([])
       end
     end
+
+    context '#to_h' do
+      it 'saves game condition in hash' do
+        game.instance_variable_set(:@secret_code, '1234')
+        expect(game.to_h).to eq(
+          turns_number: 5,
+          game_status: '',
+          hint_number: 1,
+          secret_code: '1234'
+        )
+      end
+    end
+
+    context '.build_from_hash' do
+      it 'retuns game instance with condition from hash' do
+        hash = {
+          turns_number: 10,
+          game_status: '',
+          hint_number: 1,
+          secret_code: '1234'
+        }
+        expect(Game.build_from_hash(hash).turns_number).to eq(10)
+      end
+    end
   end
 end
