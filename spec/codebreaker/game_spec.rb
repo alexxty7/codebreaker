@@ -4,7 +4,7 @@ module Codebreaker
   RSpec.describe Game do
     let(:game) { Game.new }
 
-    context '#initialize' do
+    describe '#initialize' do
       it 'generates secret code' do
         expect(game.instance_variable_get(:@secret_code)).not_to be_empty
       end
@@ -18,7 +18,7 @@ module Codebreaker
       end
     end
 
-    context '#mark_guess' do
+    describe '#mark_guess' do
       before do
         allow_any_instance_of(Game).to receive(:generate_code).and_return('1234')
       end
@@ -45,7 +45,7 @@ module Codebreaker
       end
     end
 
-    context '#generate_code' do
+    describe '#generate_code' do
       it 'return 4 numbers from 1 to 6' do
         expect(game.send(:generate_code)).to match(/[1-6]{4}/)
       end
@@ -55,7 +55,7 @@ module Codebreaker
       end
     end
 
-    context '#check_guess' do
+    describe '#check_guess' do
       before do
         allow_any_instance_of(Game).to receive(:generate_code).and_return('1234')
       end
@@ -80,7 +80,7 @@ module Codebreaker
       end
     end
 
-    context '#hint' do
+    describe '#hint' do
       it 'reveals one of the numbers in the secret code' do
         expect(game.instance_variable_get(:@secret_code)).to include(game.hint)
       end
@@ -95,7 +95,7 @@ module Codebreaker
       end
     end
 
-    context '#save result' do
+    describe '#save result' do
       after do
         File.delete('statistic.yml')
       end
@@ -106,7 +106,7 @@ module Codebreaker
       end
     end
 
-    context '.load_result' do
+    describe '.load_result' do
       it 'loads saved result' do
         game.save_result('alex')
         result = Game.load_result
@@ -119,7 +119,7 @@ module Codebreaker
       end
     end
 
-    context '#to_h' do
+    describe '#to_h' do
       it 'saves game condition in hash' do
         game.instance_variable_set(:@secret_code, '1234')
         expect(game.to_h).to eq(
@@ -131,7 +131,7 @@ module Codebreaker
       end
     end
 
-    context '.build_from_hash' do
+    describe 'build from hash' do
       it 'retuns game instance with condition from hash' do
         hash = {
           turns_number: 10,
@@ -139,7 +139,7 @@ module Codebreaker
           hint_number: 1,
           secret_code: '1234'
         }
-        expect(Game.build_from_hash(hash).turns_number).to eq(10)
+        expect(Game.new(hash).turns_number).to eq(10)
       end
     end
   end

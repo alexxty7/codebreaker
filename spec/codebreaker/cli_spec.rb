@@ -5,13 +5,13 @@ module Codebreaker
     let(:game) { Game.new }
     let(:cli) { CLI.new(game) }
 
-    context '#play' do
+    describe '#play' do
       before do
         game.instance_variable_set(:@secret_code, '1234')
         allow(cli).to receive(:gets).and_return('2234')
       end
 
-      describe 'game not completed' do
+      context 'game not completed' do
         before { allow(cli).to receive(:game_over) }
 
         it 'send a welcome message' do
@@ -38,7 +38,7 @@ module Codebreaker
         end
       end
 
-      describe 'game completed' do
+      context 'game completed' do
         it "return 'You win' if user wins" do
           allow(cli).to receive(:game_over)
           allow(cli).to receive(:gets).and_return('1234')
@@ -60,7 +60,7 @@ module Codebreaker
       end
     end
 
-    context '#save_game' do
+    describe '#save_game' do
       before { allow(game).to receive(:save_result) }
 
       it 'proms for save result' do
@@ -81,7 +81,7 @@ module Codebreaker
       end
     end
 
-    context '#play_again' do
+    describe '#play_again' do
       before do
         allow(cli).to receive(:play)
         allow(cli).to receive(:gets).and_return('yes')
